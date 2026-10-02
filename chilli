@@ -1,0 +1,3433 @@
+-- Deobfuscated by ccjvwsod on Discord
+-- Detected obfuscation: Luraph v15
+-- Local names are inferred from use (the original names are not in the bytecode)
+
+local fn, v, v2, defaultTab, Players, RunService, ReplicatedStorage, CoreGui, UserInputService, localPlayer
+local networking, fn2, tbl, v3, fn3, fn4, tbl2, fn5, fn6, tbl3
+local tbl4, fn7, n, n2, v4, v5, espSection, tbl5, color, sequence
+local palettes, red
+
+do
+	local CollectionService, ProximityPromptService, v6, v7, tbl6, tbl7, tbl8
+
+	do
+		fn = function(arg)
+			local genv = typeof(getgenv) == "function" and getgenv() or _G
+
+			if type(genv.ChilliDebugPrint) == "function" then
+				pcall(genv.ChilliDebugPrint, arg)
+			end
+		end
+
+		task.spawn(pcall, function()
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/tienkhanh1/spicy/refs/heads/main/DiscordLink"))()
+		end)
+
+		local function fn8()
+			local response = nil
+
+			local function fn9()
+				if type(response) == "string" and #response > 0 then
+					return response
+				end
+				response = game:HttpGet("https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli%20Library")
+				return response
+			end
+
+			local function fn10()
+				local chilliHubSaeCleanup = (typeof(getgenv) == "function" and getgenv() or _G).ChilliHubSaeCleanup
+
+				if type(chilliHubSaeCleanup) == "function" then
+					pcall(chilliHubSaeCleanup)
+				end
+
+				local tbl9 = { game:GetService("CoreGui") }
+
+				if typeof(gethui) == "function" then
+					local ok, result = pcall(gethui)
+
+					if ok and typeof(result) == "Instance" then
+						table.insert(tbl9, result)
+					end
+				end
+
+				local tbl10 = {
+					Settings = true,
+					ChilliLeftCenter = true,
+					ChilliLibrarySettings = true,
+					ChilliLibraryLauncher = true,
+				}
+
+				local n3 = 0
+
+				for _, v8 in ipairs(tbl9) do
+					for _, child in ipairs(v8:GetChildren()) do
+						if child:IsA("ScreenGui") and (child:GetAttribute("ChilliLibraryOwned") == true or tbl10[child.Name]) then
+							pcall(function()
+								child:Destroy()
+							end)
+
+							n3 += 1
+						end
+					end
+				end
+
+				if n3 > 0 then
+					fn("cleared " .. n3 .. " leftover Chilli UI screens")
+				end
+			end
+
+			local function fn11()
+				local v8 = fn9()
+				local chunk, v9 = loadstring(v8)
+				assert(chunk, v9)
+				local v10 = chunk()
+				assert(type(v10) == "function", "Chilli Library bootstrap is invalid.")
+				local v11 = table.create(45)
+				local n3 = 1
+
+				for i = 1, 90, 2 do
+					v11[n3] = string.char(bit32.bxor(tonumber(string.sub("306908100841206d474f00185f26635b2101387507010810127d7d477a473b6f435a0916573165562900226c00", i, i + 1), 16), string.byte("s9K!2vQ#", (n3 - 1) % 8 + 1)))
+					n3 += 1
+				end
+
+				return v10(table.concat(v11))
+			end
+
+			local chilliLibraryFailedToLoad = "unknown"
+
+			for i = 1, 6 do
+				task.wait()
+				pcall(fn10)
+				local ok, result = pcall(fn11)
+				if ok and type(result) == "table" then
+					return result
+				end
+				chilliLibraryFailedToLoad = tostring(result)
+
+				if type(chilliLibraryFailedToLoad) == "string" and string.find(chilliLibraryFailedToLoad, "HttpGet", 1, true) then
+					response = nil
+				end
+
+				fn("library load attempt " .. i .. " failed: " .. chilliLibraryFailedToLoad)
+				task.wait(1 + i * 0.5)
+			end
+
+			error("Chilli Library failed to load: " .. chilliLibraryFailedToLoad, 0)
+		end
+
+		v = fn8()
+		assert(type(v) == "table" and type(v.CreateWindow) == "function" and type(v.Finalize) == "function", "Chilli Library returned an invalid API.")
+
+		v.ManualQuickDefaults = {
+			PinnedFeatures = { "Player > Movement > Speed Boost", "Player > Movement > Boost Speed" },
+			Keybinds = { ["Player > Movement > Speed Boost"] = "Q" },
+			PinGroups = {},
+			LeftCenterHidden = true,
+		}
+
+		v2 = v:CreateWindow({ Name = "Guy Hub - Steal An Egg", DefaultTab = "Farm" })
+		defaultTab = v2:GetDefaultTab()
+		Players = game:GetService("Players")
+		RunService = game:GetService("RunService")
+		ReplicatedStorage = game:GetService("ReplicatedStorage")
+		CoreGui = game:GetService("CoreGui")
+		UserInputService = game:GetService("UserInputService")
+		CollectionService = game:GetService("CollectionService")
+		game:GetService("LocalizationService")
+		ProximityPromptService = game:GetService("ProximityPromptService")
+		localPlayer = Players.LocalPlayer
+		networking = ReplicatedStorage:WaitForChild("Packages"):WaitForChild("Networking")
+
+		fn2 = function(arg)
+			local ok, result = pcall(function()
+				return require(arg())
+			end)
+
+			return ok and result or nil
+		end
+
+		tbl = {
+			EggState = fn2(function()
+				return ReplicatedStorage.Client.EggState
+			end),
+			AreaEggs = fn2(function()
+				return ReplicatedStorage.Shared.Types.AreaEggs
+			end),
+			ToolGameplayGuard = fn2(function()
+				return ReplicatedStorage.Client.ToolGameplayGuard
+			end),
+			Assets = fn2(function()
+				return ReplicatedStorage.Data.Assets
+			end),
+			Guards = fn2(function()
+				return ReplicatedStorage.Data.Guards
+			end),
+			EggRecords = fn2(function()
+				return ReplicatedStorage.Shared.Util.EggRecords
+			end),
+			Mutations = fn2(function()
+				return ReplicatedStorage.Shared.Modules.Mutations
+			end),
+			Save = fn2(function()
+				return ReplicatedStorage.Shared.Save
+			end),
+			FuseKernel = fn2(function()
+				return ReplicatedStorage.Shared.Util.FuseKernel
+			end),
+			AreaEggCycle = fn2(function()
+				return ReplicatedStorage.Shared.Util.AreaEggCycle
+			end),
+			AreaEggResetWall = fn2(function()
+				return ReplicatedStorage.Client.AreaEggResetWall
+			end),
+			AreaEggResetCycle = fn2(function()
+				return ReplicatedStorage.Data.AreaEggResetCycle
+			end),
+			Gears = fn2(function()
+				return ReplicatedStorage.Data.Gears
+			end),
+			Areas = fn2(function()
+				return ReplicatedStorage.Data.Areas
+			end),
+			LimitedEgg = fn2(function()
+				return ReplicatedStorage.Data.LimitedEgg
+			end),
+			BrainrotEgg = fn2(function()
+				return ReplicatedStorage.Data.BrainrotEgg
+			end),
+			MonsterEgg = fn2(function()
+				return ReplicatedStorage.Data.MonsterEgg
+			end),
+		}
+
+		local save = tbl.Save
+
+		if type(save) == "table" and (type(save.Get) ~= "function" or type(save.FieldSignal) ~= "function") then
+			tbl.Save = setmetatable({
+				Get = type(save.Get) == "function" and save.Get or save.Peek,
+				FieldSignal = type(save.FieldSignal) == "function" and save.FieldSignal or save.Watch,
+			}, { __index = save })
+		end
+
+		local function fn9()
+			if typeof(gethui) == "function" then
+				local ok, result = pcall(gethui)
+				if ok and typeof(result) == "Instance" then
+					return result
+				end
+			end
+
+			return CoreGui
+		end
+
+		v3 = fn9()
+
+		do
+			local v8 = Random.new()
+			local str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+
+			fn3 = function()
+				local v9 = v8:NextInteger(12, 20)
+				local v10 = table.create(v9)
+
+				for i = 1, v9 do
+					local v11 = v8:NextInteger(1, #str)
+					v10[i] = string.sub("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", v11, v11)
+				end
+
+				return table.concat(v10)
+			end
+		end
+
+		do
+			local tbl9 = {}
+
+			fn4 = function(arg)
+				table.insert(tbl9, arg)
+			end
+
+			tbl2 = {}
+
+			fn5 = function(arg, arg2)
+				local n3 = 1000
+				local n4 = 3
+				local n5 = 12
+
+				local function fn10(arg3)
+					if arg3 <= 0 then
+						return 0
+					end
+					local n6 = 10 ^ (math.floor(math.log10(arg3)) - 2)
+					return math.floor(arg3 / n6 + 0.5) * n6
+				end
+
+				local function fn11(arg3)
+					local n6 = math.clamp(tonumber(arg3) or 0, 0, 1000)
+					if n6 <= 0 then
+						return 0
+					end
+					return fn10(10 ^ (n4 + (n5 - n4) * n6 / n3))
+				end
+
+				local function fn12(arg3)
+					local n6 = tonumber(arg3) or 0
+					if n6 <= 0 then
+						return 0
+					end
+					local n7 = n5 - n4
+					return math.clamp(math.floor((math.log10(n6) - n4) / n7 * n3 * 100 + 0.5) / 100, 0, 1000)
+				end
+
+				local function fn13(arg3)
+					local str = string.format(arg3 >= 100 and "%.0f" or arg3 >= 10 and "%.1f" or "%.2f", arg3)
+
+					if string.find(str, ".", 1, true) then
+						str = string.gsub(string.gsub(str, "0+$", ""), "%.$", "")
+					end
+
+					return str
+				end
+
+				local function fn14(arg3)
+					local v8 = fn11(arg3)
+					if v8 <= 0 then
+						return "Off"
+					end
+
+					if v8 < 1000000 then
+						return fn13(v8 / 1000) .. " K/s"
+					end
+
+					if v8 < 1e9 then
+						return fn13(v8 / 1000000) .. " M/s"
+					end
+					return fn13(v8 / 1e9) .. " B/s"
+				end
+
+				local function fn15(arg3)
+					local v8 = fn11(arg3)
+					if v8 <= 0 then
+						return "0"
+					end
+
+					if v8 < 1000000 then
+						return fn13(v8 / 1000) .. "k"
+					end
+					return (string.gsub(string.gsub(string.format("%.3f", v8 / 1000000), "0+$", ""), "%.$", ""))
+				end
+
+				local tbl10 = { k = 1000, m = 1000000, b = 1e9, t = 1e12 }
+
+				local function fn16(arg3)
+					local v8 = string.gsub(string.lower(string.gsub(tostring(arg3 or ""), "[%s,/]", "")), "s$", "")
+					if v8 == "" or v8 == "off" then
+						return 0
+					end
+					local v9, v10 = string.match(v8, "^([%d%.]+)([kmbt]?)$")
+					local num = tonumber(v9)
+					if not num then
+						return nil
+					end
+					return fn12(num * (tbl10[v10] or 1000000))
+				end
+
+				local v8 = arg:CreateSlider({
+					Name = arg2.Name,
+					Note = arg2.Note,
+					SubOf = arg2.SubOf,
+					Min = 0,
+					Max = n3,
+					Default = fn12(arg2.Default or 0),
+					AllowDecimals = true,
+					Increment = 0.01,
+					ValueFormat = fn14,
+					ValueParse = fn16,
+					Callback = function(arg3)
+						if type(arg2.OnRaw) == "function" then
+							arg2.OnRaw(fn11(arg3))
+						end
+					end,
+				})
+
+				local value = type(v8) == "table" and rawget(v8, "Instance") or nil
+
+				if typeof(value) == "Instance" then
+					for _, descendant in ipairs(value:GetDescendants()) do
+						if descendant:IsA("TextBox") then
+							local connection = descendant.Focused:Connect(function()
+								task.defer(function()
+									if descendant:IsFocused() then
+										local ok, result = pcall(v8.Get, v8)
+										descendant.Text = fn15(ok and result or 0)
+										descendant.CursorPosition = #descendant.Text + 1
+										descendant.SelectionStart = 1
+									end
+								end)
+							end)
+
+							fn4(function()
+								pcall(function()
+									connection:Disconnect()
+								end)
+							end)
+						end
+					end
+				end
+
+				if type(arg2.Legacy) == "string" and type(arg2.SectionName) == "string" then
+					table.insert(tbl2, { Handle = v8, Name = arg2.Name, Legacy = arg2.Legacy, Section = arg2.SectionName, StepOf = fn12 })
+				end
+
+				return v8
+			end
+
+			local text = "All"
+
+			fn6 = function(arg)
+				if type(arg) ~= "table" then
+					return arg
+				end
+				local value = rawget(arg, "Instance")
+				if typeof(value) ~= "Instance" then
+					return arg
+				end
+				local flag = false
+
+				local function fn10(arg2)
+					if flag then
+						return
+					end
+
+					if arg2.Text == "None" then
+						flag = true
+						arg2.Text = text
+						flag = false
+					end
+				end
+
+				local function fn11(descendant)
+					if not descendant:IsA("TextLabel") or descendant.Name ~= "Value" then
+						return
+					end
+					fn10(descendant)
+
+					local connection = descendant:GetPropertyChangedSignal("Text"):Connect(function()
+						fn10(descendant)
+					end)
+
+					fn4(function()
+						pcall(function()
+							connection:Disconnect()
+						end)
+					end)
+				end
+
+				for _, descendant in ipairs(value:GetDescendants()) do
+					fn11(descendant)
+				end
+
+				local connection = value.DescendantAdded:Connect(fn11)
+
+				fn4(function()
+					pcall(function()
+						connection:Disconnect()
+					end)
+				end)
+
+				return arg
+			end
+
+			local genv = typeof(getgenv) == "function" and getgenv() or _G
+			local chilliHubSaeCleanup = genv.ChilliHubSaeCleanup
+
+			if type(chilliHubSaeCleanup) == "function" then
+				pcall(chilliHubSaeCleanup)
+			end
+
+			genv.ChilliHubSaeCleanup = function()
+				for i = #tbl9, 1, -1 do
+					pcall(tbl9[i])
+				end
+
+				table.clear(tbl9)
+			end
+		end
+
+		do
+			local n3 = 0
+			local fn10 = nil
+
+			fn10 = function(arg, arg2)
+				local n4 = arg2 or 0
+
+				if type(arg) == "table" then
+					if n4 > 3 then
+						return
+					end
+					local n5 = 0
+
+					for k, v8 in pairs(arg) do
+						n5 += 1
+
+						if not (n5 > 20) then
+							fn10(k, n4 + 1)
+							fn10(v8, n4 + 1)
+							continue
+						end
+
+						break
+					end
+				elseif typeof(arg) == "Instance" then
+					pcall(arg.GetFullName, arg)
+				else
+					n3 += #tostring(arg)
+				end
+			end
+
+			local tbl9 = {}
+
+			local function fn11(arg)
+				tbl9[#tbl9 + 1] = arg
+			end
+
+			local function fn12()
+				for _, v8 in ipairs(tbl9) do
+					pcall(function()
+						v8:Disconnect()
+					end)
+				end
+
+				table.clear(tbl9)
+			end
+
+			local function chilliToolKeeper()
+				fn12()
+
+				for _, v8 in ipairs({
+					"RE/GearSatchel/Lost",
+					"RE/GearSatchel/Gained",
+					"RE/RigSync/ProbeSatchel",
+					"RE/RigSync/SeedSatchel",
+					"RE/RigSync/CorrectionBegan",
+					"RE/RigSync/Refresh",
+					"RE/ToolTrigger/Trigger",
+					"RE/BatSwing/Trigger",
+				}) do
+					local v9 = networking:FindFirstChild(v8)
+
+					if v9 and v9:IsA("RemoteEvent") then
+						fn11(v9.OnClientEvent:Connect(function(...)
+							fn10({ ... })
+						end))
+					end
+				end
+
+				local function fn13(arg)
+					if not arg then
+						return
+					end
+
+					fn11(arg.ChildRemoved:Connect(function(child)
+						if child:IsA("Tool") then
+							fn10({ child.Name, child.Parent })
+						end
+					end))
+
+					fn11(arg.ChildAdded:Connect(function(child)
+						if child:IsA("Tool") then
+							fn10({ child.Name })
+						end
+					end))
+				end
+
+				fn13(localPlayer:FindFirstChildOfClass("Backpack"))
+
+				fn11(localPlayer.ChildAdded:Connect(function(child)
+					if child:IsA("Backpack") then
+						fn13(child)
+					end
+				end))
+
+				task.spawn(function()
+					pcall(function()
+						local v8 = tbl.Save.Get()
+						fn10({ v8.GearInventory, v8.Inventory }, 2)
+					end)
+
+					if type(getgc) == "function" then
+						pcall(function()
+							for _, v8 in ipairs(getgc(false)) do
+								if type(v8) == "function" and islclosure(v8) then
+									pcall(debug.info, v8, "n")
+								end
+							end
+						end)
+					end
+				end)
+			end
+			;(typeof(getgenv) == "function" and getgenv() or _G).ChilliToolKeeper = chilliToolKeeper
+			task.defer(chilliToolKeeper)
+			fn4(fn12)
+		end
+
+		do
+			local n3 = 0.35
+			local n4 = 5
+			local tbl9 = {}
+			local flag = true
+
+			tbl3 = {
+				Add = function(arg)
+					local tbl10 = { Run = arg, Gap = n3, Idle = n4, Repeat = false, Hold = 0 }
+					table.insert(tbl9, tbl10)
+					return tbl10
+				end,
+				Wake = function()
+					flag = true
+				end,
+				Backoff = function(arg, arg2)
+					if arg then
+						arg.Hold = tonumber(arg2) or 6
+					end
+				end,
+			}
+
+			local connection = RunService.Heartbeat:Connect(function(deltaTime)
+				local v8 = flag
+				flag = false
+
+				for _, v9 in ipairs(tbl9) do
+					v9.Gap = v9.Gap + deltaTime
+					v9.Idle = v9.Idle + deltaTime
+
+					if v9.Hold > 0 then
+						v9.Hold = v9.Hold - deltaTime
+					elseif v9.Gap >= n3 and (v8 or v9.Repeat or v9.Idle >= n4) then
+						v9.Gap = 0
+						v9.Idle = 0
+						local ok, result = pcall(v9.Run, v9)
+						v9.Repeat = ok and result == true
+					end
+				end
+			end)
+
+			fn4(function()
+				connection:Disconnect()
+			end)
+		end
+
+		v6 = defaultTab:CreateSection({ Name = "Dr Scramble Event", Expanded = false })
+		local v8
+		v8 = defaultTab:CreateSection({ Name = "Auto Steal", Expanded = true })
+		local v9
+		v9 = defaultTab:CreateSection({ Name = "Auto Place Egg", Expanded = false })
+		local v10
+		v10 = defaultTab:CreateSection({ Name = "Auto Treadmill", Expanded = false })
+		local v11
+		v11 = defaultTab:CreateSection({ Name = "Auto Hatch & Equip", Expanded = false })
+		local v12
+		v12 = defaultTab:CreateSection({ Name = "Auto Sell", Expanded = false })
+		local v13
+		v13 = defaultTab:CreateSection({ Name = "Auto Fuse Machine", Expanded = false })
+		local v14
+		v14 = defaultTab:CreateSection({ Name = "Auto Favorite", Expanded = false })
+		v7 = defaultTab:CreateSection({ Name = "Auto Rift & Boss", Expanded = false })
+		tbl6 = { Paused = false }
+
+		do
+			local n3 = 0.5
+			local v15 = nil
+			local tbl9 = nil
+			local tbl10 = {}
+			local flag = false
+			local n4 = 0
+
+			local function fn10()
+				for i = #tbl10, 1, -1 do
+					local v16 = tbl10[i]
+
+					if v16 and v16.Connected then
+						v16:Disconnect()
+					end
+
+					tbl10[i] = nil
+				end
+			end
+
+			local function fn11()
+				fn10()
+				local v16 = v15
+				local v17 = tbl9
+				v15 = nil
+				tbl9 = nil
+				if not v16 or not v16.Parent or not v17 then
+					return
+				end
+
+				pcall(function()
+					v16.BreakJointsOnDeath = v17.BreakJointsOnDeath
+					v16.RequiresNeck = v17.RequiresNeck
+					v16:SetStateEnabled(Enum.HumanoidStateType.Dead, v17.DeadEnabled)
+				end)
+			end
+
+			local function fn12(arg)
+				if not arg or not arg.Parent then
+					return false
+				end
+
+				return pcall(function()
+					arg.BreakJointsOnDeath = false
+					arg.RequiresNeck = false
+					arg:SetStateEnabled(Enum.HumanoidStateType.Dead, false)
+				end) and arg.BreakJointsOnDeath == false and arg.RequiresNeck == false and arg:GetStateEnabled(Enum.HumanoidStateType.Dead) == false
+			end
+
+			local function fn13(arg)
+				if tbl6.Paused or arg ~= v15 or not arg or not arg.Parent or flag then
+					return false
+				end
+				local maxHealth = arg.MaxHealth
+				if maxHealth <= 0 then
+					return false
+				end
+
+				if maxHealth == math.huge or arg.Health >= maxHealth then
+					return true
+				end
+				flag = true
+
+				local ok = pcall(function()
+					arg.Health = maxHealth
+				end)
+
+				flag = false
+				return ok and arg.Health >= maxHealth
+			end
+
+			local function fn14(arg)
+				if arg == v15 and arg and arg.Parent then
+					return true
+				end
+				fn11()
+				if not arg or not arg:IsA("Humanoid") or not arg.Parent then
+					return false
+				end
+				v15 = arg
+
+				tbl9 = {
+					BreakJointsOnDeath = arg.BreakJointsOnDeath,
+					RequiresNeck = arg.RequiresNeck,
+					DeadEnabled = arg:GetStateEnabled(Enum.HumanoidStateType.Dead),
+				}
+
+				if not fn12(arg) then
+					fn11()
+					return false
+				end
+				fn13(arg)
+
+				tbl10[#tbl10 + 1] = arg.HealthChanged:Connect(function()
+					fn13(arg)
+				end)
+
+				tbl10[#tbl10 + 1] = arg:GetPropertyChangedSignal("MaxHealth"):Connect(function()
+					fn13(arg)
+				end)
+
+				tbl10[#tbl10 + 1] = arg.StateChanged:Connect(function(old, new)
+					if new == Enum.HumanoidStateType.Dead and not tbl6.Paused then
+						fn12(arg)
+						fn13(arg)
+					end
+				end)
+
+				n4 = os.clock()
+				return true
+			end
+
+			local function fn15()
+				local character = localPlayer.Character
+				return character and character:FindFirstChildOfClass("Humanoid") or nil
+			end
+
+			local connection = localPlayer.CharacterAdded:Connect(function()
+				task.defer(function()
+					fn14(fn15())
+				end)
+			end)
+
+			local connection2 = RunService.Heartbeat:Connect(function()
+				local now = os.clock()
+				if tbl6.Paused or now - n4 < n3 then
+					return
+				end
+				n4 = now
+				local v16 = fn15()
+				if v16 ~= v15 then
+					fn14(v16)
+					return
+				end
+
+				if v16 then
+					fn12(v16)
+					fn13(v16)
+				end
+			end)
+
+			task.defer(function()
+				fn14(fn15())
+			end)
+
+			fn4(function()
+				if connection then
+					connection:Disconnect()
+				end
+
+				if connection2 then
+					connection2:Disconnect()
+				end
+
+				fn11()
+			end)
+		end
+
+		local tbl9 = { "bat", "katana", "axe", "staff", "club", "hammer", "sword", "blade" }
+
+		tbl4 = {
+			Steal = { Active = false, LastFinishedAt = 0, Carrying = false },
+			Movement = {
+				Owner = nil,
+				PlaceWanted = false,
+				StealFirst = false,
+				MutationWanted = false,
+				FracturedWanted = false,
+			},
+			AntiGuard = {
+				Enabled = false,
+				Busy = false,
+				BusySince = 0,
+				HitArms = 0,
+				Handle = nil,
+				Render = nil,
+			},
+			IsBatTool = function(arg)
+				if typeof(arg) ~= "Instance" or not arg:IsA("Tool") then
+					return false
+				end
+
+				if arg:GetAttribute("IsBat") == true then
+					return true
+				end
+				local attribute = arg:GetAttribute("GearName")
+
+				if type(attribute) == "string" then
+					local gears = tbl.Gears
+					local directory = type(gears) == "table" and gears.Directory or nil
+					local flag = type(directory) == "table" and directory[attribute] or nil
+					return type(flag) == "table" and flag.BatControllerData ~= nil
+				end
+
+				if arg:GetAttribute("ItemType") ~= nil then
+					return false
+				end
+				local v15 = string.lower(arg.Name)
+
+				for _, v16 in ipairs(tbl9) do
+					if string.find(v15, v16, 1, true) then
+						return true
+					end
+				end
+
+				return false
+			end,
+			FindBat = function()
+				local character = localPlayer.Character
+				local tool = character and character:FindFirstChildWhichIsA("Tool")
+				if tbl4.IsBatTool(tool) then
+					return tool
+				end
+				local backpack = localPlayer:FindFirstChildOfClass("Backpack")
+
+				if backpack then
+					for _, child in ipairs(backpack:GetChildren()) do
+						if tbl4.IsBatTool(child) then
+							return child
+						end
+					end
+				end
+
+				if character then
+					for _, child in ipairs(character:GetChildren()) do
+						if tbl4.IsBatTool(child) then
+							return child
+						end
+					end
+				end
+
+				return nil
+			end,
+			IsNight = function()
+				local areaEggCycle = tbl.AreaEggCycle
+				if type(areaEggCycle) ~= "table" or type(areaEggCycle.IsNightPhase) ~= "function" then
+					return false
+				end
+				local ok, result = pcall(areaEggCycle.IsNightPhase, workspace:GetServerTimeNow())
+				return ok and result == true
+			end,
+			WallSealed = function()
+				local areaEggResetWall = tbl.AreaEggResetWall
+				if type(areaEggResetWall) ~= "table" or type(areaEggResetWall.IsSealed) ~= "function" then
+					return false
+				end
+				local ok, result = pcall(areaEggResetWall.IsSealed)
+				return ok and result == true
+			end,
+			WallOpenDelay = function()
+				local areaEggResetCycle = tbl.AreaEggResetCycle
+				if type(areaEggResetCycle) ~= "table" then
+					return 5
+				end
+				return (tonumber(areaEggResetCycle.WallCountdownDelayAfterDayStartsSeconds) or 2) + (tonumber(areaEggResetCycle.WallCountdownSeconds) or 3)
+			end,
+			ClaimMovement = function(owner)
+				local movement = tbl4.Movement
+				if movement.Owner == nil or movement.Owner == owner or movement.Owner == "treadmill" and owner ~= "treadmill" or movement.Owner == "scramble" and owner == "steal" then
+					movement.Owner = owner
+					return true
+				end
+				return false
+			end,
+			ReleaseMovement = function(arg)
+				if tbl4.Movement.Owner == arg then
+					tbl4.Movement.Owner = nil
+				end
+			end,
+		}
+
+		do
+			local shieldMethods = { "Humanoid Swap", "Disable Monitor" }
+			tbl4.ShieldMethods = shieldMethods
+			local v15 = shieldMethods[1]
+			local tbl10 = {}
+			local tbl11 = {}
+			local connection = nil
+			local n3 = 0
+			local tbl12 = { Original = nil, Clone = nil, Links = {} }
+			local connection2 = nil
+			local tbl13 = {}
+
+			local function fn10()
+				for _, v16 in ipairs(tbl13) do
+					task.defer(function()
+						pcall(v16)
+					end)
+				end
+			end
+
+			tbl4.OnHumanoidChanged = function(arg)
+				table.insert(tbl13, arg)
+				local tbl14
+
+				tbl14 = {
+					Connected = true,
+					Disconnect = function()
+						tbl14.Connected = false
+						local v16 = table.find(tbl13, arg)
+
+						if v16 then
+							table.remove(tbl13, v16)
+						end
+					end,
+				}
+
+				return tbl14
+			end
+
+			local function fn11(humanoid)
+				pcall(function()
+					local playerScripts = localPlayer:FindFirstChild("PlayerScripts")
+					playerScripts = playerScripts and playerScripts:FindFirstChild("PlayerModule")
+
+					if playerScripts then
+						local controls = require(playerScripts):GetControls()
+
+						if type(controls) == "table" then
+							controls.humanoid = humanoid
+						end
+					end
+				end)
+			end
+
+			local function fn12(arg)
+				local animate = arg and arg:FindFirstChild("Animate")
+
+				if animate and animate:IsA("LocalScript") then
+					task.spawn(function()
+						animate.Enabled = false
+						task.wait()
+						animate.Enabled = true
+					end)
+				end
+			end
+
+			local function fn13()
+				for _, link in ipairs(tbl12.Links) do
+					pcall(function()
+						link:Disconnect()
+					end)
+				end
+
+				table.clear(tbl12.Links)
+			end
+
+			tbl4.UndoSwap = function()
+				fn13()
+				local character = localPlayer.Character
+				local original = tbl12.Original
+				local clone = tbl12.Clone
+				local v16 = tbl12
+				tbl12.Original = nil
+				v16.Clone = nil
+
+				if original and clone and character and original.Parent == nil and clone.Parent == character then
+					original.Parent = character
+					workspace.CurrentCamera.CameraSubject = original
+					fn11(original)
+
+					pcall(function()
+						clone:Destroy()
+					end)
+
+					fn12(character)
+					fn10()
+				end
+			end
+
+			local tbl14 = {
+				[Enum.HumanoidStateType.Running] = true,
+				[Enum.HumanoidStateType.RunningNoPhysics] = true,
+				[Enum.HumanoidStateType.Landed] = true,
+			}
+
+			tbl4.Grounded = function(arg)
+				if not arg then
+					arg = localPlayer.Character
+					arg = arg and arg:FindFirstChildOfClass("Humanoid")
+				end
+
+				if not arg or arg.Health <= 0 or arg.FloorMaterial == Enum.Material.Air then
+					return false
+				end
+				return tbl14[arg:GetState()] == true
+			end
+
+			tbl4.ShieldPaused = false
+
+			local function fn14()
+				local character = localPlayer.Character
+				local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+				if not humanoid or humanoid.Health <= 0 then
+					return
+				end
+
+				if tbl12.Clone and tbl12.Clone.Parent == character then
+					return
+				end
+
+				if not tbl4.Grounded(humanoid) then
+					return
+				end
+				local clone = humanoid:Clone()
+				humanoid.Parent = nil
+				clone.Parent = character
+				workspace.CurrentCamera.CameraSubject = clone
+				fn11(clone)
+				fn12(character)
+				local v16 = tbl12
+				tbl12.Original = humanoid
+				v16.Clone = clone
+				fn10()
+				local animator = humanoid:FindFirstChildOfClass("Animator")
+				local animator2 = clone:FindFirstChildOfClass("Animator")
+
+				if animator and animator2 then
+					table.insert(tbl12.Links, animator.AnimationPlayed:Connect(function(arg)
+						local animation = arg.Animation
+						if not animation or clone.Parent == nil then
+							return
+						end
+
+						local ok, result = pcall(function()
+							return animator2:LoadAnimation(animation)
+						end)
+
+						if not ok or not result then
+							return
+						end
+
+						pcall(function()
+							result.Priority = arg.Priority
+							result.Looped = arg.Looped
+							local speed = arg.Speed
+							result:Play(0.05, math.max(arg.WeightTarget, 0.01), speed)
+						end)
+
+						local connection3 = nil
+
+						connection3 = arg.Stopped:Connect(function()
+							connection3:Disconnect()
+
+							pcall(function()
+								result:Stop(0.1)
+							end)
+						end)
+					end))
+				end
+
+				table.insert(tbl12.Links, clone.Died:Connect(function()
+					fn13()
+					local v17 = tbl12
+					tbl12.Original = nil
+					v17.Clone = nil
+					local character2 = localPlayer.Character
+
+					if character2 and humanoid.Parent == nil then
+						humanoid.Parent = character2
+						workspace.CurrentCamera.CameraSubject = humanoid
+						fn11(humanoid)
+						fn10()
+					end
+
+					pcall(function()
+						clone:Destroy()
+					end)
+
+					humanoid.Health = 0
+				end))
+			end
+
+			local function fn15()
+				if type(getconnections) ~= "function" then
+					return
+				end
+
+				for _, v16 in ipairs({ RunService.Heartbeat, RunService.PreSimulation, RunService.PostSimulation }) do
+					local ok, result = pcall(getconnections, v16)
+
+					if ok and type(result) == "table" then
+						for _, v17 in ipairs(result) do
+							local ok2, result2 = pcall(function()
+								return v17.Function
+							end)
+
+							ok2 = ok2 and type(result2) == "function"
+							local flag = false
+							local result3 = nil
+
+							if ok2 then
+								flag, result3 = pcall(debug.info, result2, "s")
+							end
+
+							if flag and string.find(tostring(result3), "UGI", 1, true) then
+								local ok3, result4 = pcall(function()
+									return v17.Enabled
+								end)
+
+								if not ok3 or result4 ~= false then
+									if pcall(function()
+										v17:Disable()
+									end) then
+										table.insert(tbl11, v17)
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+
+			local function fn16()
+				if connection then
+					connection:Disconnect()
+					connection = nil
+				end
+
+				if connection2 then
+					connection2:Disconnect()
+					connection2 = nil
+				end
+
+				for _, v16 in ipairs(tbl11) do
+					pcall(function()
+						v16:Enable()
+					end)
+				end
+
+				table.clear(tbl11)
+			end
+
+			local function fn17()
+				if tbl4.ShieldPaused then
+					return
+				end
+
+				if v15 == shieldMethods[1] then
+					fn14()
+				else
+					fn15()
+				end
+			end
+
+			local function fn18()
+				fn17()
+				n3 = 0
+
+				connection = RunService.Heartbeat:Connect(function(deltaTime)
+					n3 += deltaTime
+					local character = localPlayer.Character
+					local flag = v15 == shieldMethods[1]
+
+					if flag then
+						flag = not (tbl12.Clone and character and tbl12.Clone.Parent == character)
+					end
+
+					if (flag and 0.25 or 3) <= n3 then
+						n3 = 0
+						fn17()
+					end
+				end)
+
+				connection2 = localPlayer.CharacterAdded:Connect(function(character)
+					fn13()
+					local v16 = tbl12
+					tbl12.Original = nil
+					v16.Clone = nil
+					if v15 ~= shieldMethods[1] then
+						return
+					end
+
+					task.spawn(function()
+						character:WaitForChild("Humanoid", 10)
+						task.wait(1)
+
+						if connection and localPlayer.Character == character then
+							fn17()
+						end
+					end)
+				end)
+			end
+
+			tbl4.Swapped = function()
+				if v15 ~= shieldMethods[1] then
+					return true
+				end
+				local character = localPlayer.Character
+				return tbl12.Clone ~= nil and character ~= nil and tbl12.Clone.Parent == character
+			end
+
+			tbl4.Shield = function(arg, arg2)
+				tbl10[arg] = arg2 == true or nil
+				if next(tbl10) == nil then
+					fn16()
+					return
+				end
+
+				if connection then
+					return
+				end
+				fn18()
+			end
+
+			tbl4.SetShieldMethod = function(arg)
+				if not table.find(shieldMethods, arg) or arg == v15 then
+					return
+				end
+				local flag = connection ~= nil
+				fn16()
+				v15 = arg
+
+				if flag and next(tbl10) ~= nil then
+					fn18()
+				end
+			end
+
+			fn4(fn16)
+		end
+
+		tbl4.Shield("load", true)
+
+		tbl4.Toggle = function(arg, arg2)
+			if type(arg) ~= "table" then
+				return arg2 == true
+			end
+
+			local ok, result = pcall(function()
+				local controller = arg._controller
+				return type(controller) == "table" and type(controller.GetValue) == "function" and controller.GetValue()
+			end)
+
+			if ok and type(result) == "boolean" then
+				return result
+			end
+
+			for _, v15 in ipairs({ "Get", "GetValue" }) do
+				local ok2, result2 = pcall(function()
+					return arg[v15]
+				end)
+
+				if ok2 and type(result2) == "function" then
+					local ok3, result3 = pcall(result2, arg)
+					if ok3 and type(result3) == "boolean" then
+						return result3
+					end
+				end
+			end
+
+			return arg2 == true
+		end
+
+		tbl4.Root = function()
+			local character = localPlayer.Character
+			character = character and character:FindFirstChild("HumanoidRootPart")
+			return character and character:IsDescendantOf(workspace) and character or nil
+		end
+
+		tbl4.PlacedPoints = function()
+			local placedEggRenders = workspace:FindFirstChild("PlacedEggRenders")
+			local tbl10 = {}
+			if not placedEggRenders then
+				return tbl10
+			end
+			local str = tostring(localPlayer.UserId)
+
+			for _, child in ipairs(placedEggRenders:GetChildren()) do
+				if string.find(child.Name, str, 1, true) then
+					local ok, result = pcall(function()
+						return child:IsA("Model") and child:GetPivot() or child.CFrame
+					end)
+
+					if ok then
+						table.insert(tbl10, result.Position)
+					end
+				end
+			end
+
+			return tbl10
+		end
+
+		tbl4.OwnPlot = function()
+			local plots = workspace:FindFirstChild("Plots")
+			if not plots then
+				return nil
+			end
+
+			for _, child in ipairs(plots:GetChildren()) do
+				local plotSign = child:FindFirstChild("PlotSign")
+				plotSign = plotSign and plotSign:FindFirstChild("PlayerPlotSign")
+				plotSign = plotSign and plotSign:FindFirstChild("Frame")
+				plotSign = plotSign and plotSign:FindFirstChild("PlayerName")
+
+				if plotSign and plotSign:IsA("TextLabel") then
+					local v15 = string.lower(plotSign.Text)
+					if v15 == string.lower(localPlayer.Name) or v15 == string.lower(localPlayer.DisplayName) then
+						return child
+					end
+				end
+			end
+
+			return nil
+		end
+
+		local function fn10()
+			local v15 = tbl4.PlacedPoints()
+			if #v15 == 0 then
+				return nil
+			end
+			local vector = Vector3.zero
+
+			for _, v16 in ipairs(v15) do
+				vector += v16
+			end
+
+			return vector / #v15
+		end
+
+		tbl4.PenAnchor = function()
+			local v15 = fn10()
+			if v15 then
+				return v15
+			end
+			local v16 = tbl4.OwnPlot()
+			if not v16 then
+				return nil
+			end
+			local toUpdate = v16:FindFirstChild("ToUpdate")
+			local starterPen = toUpdate and toUpdate:FindFirstChild("StarterPen") or v16:FindFirstChild("CenterPoint")
+			if not starterPen then
+				return nil
+			end
+
+			local ok, result = pcall(function()
+				return starterPen:IsA("Model") and starterPen:GetPivot() or starterPen.CFrame
+			end)
+
+			return ok and result.Position or nil
+		end
+
+		tbl4.Plot = function()
+			local v15 = tbl4.OwnPlot()
+			if v15 then
+				return v15
+			end
+			local plots = workspace:FindFirstChild("Plots")
+			local v16 = fn10()
+			if not plots or not v16 then
+				return nil
+			end
+			local huge = math.huge
+			local v17 = nil
+
+			for _, child in ipairs(plots:GetChildren()) do
+				local ok, result, result2 = pcall(function()
+					return child:GetBoundingBox()
+				end)
+
+				if ok and result and result2 then
+					local v18 = result:PointToObjectSpace(v16)
+					local n3 = result2.X / 2
+					local flag = math.abs(v18.X) <= n3
+					local flag2
+
+					if flag then
+						local n4 = result2.Z / 2
+						flag2 = math.abs(v18.Z) <= n4
+					else
+						flag2 = flag
+					end
+
+					if flag2 then
+						return child
+					end
+					local magnitude = (result.Position - v16).Magnitude
+
+					if magnitude < huge then
+						v17 = child
+						huge = magnitude
+					end
+				end
+			end
+
+			if v17 and huge <= 60 then
+				return v17
+			end
+			return nil
+		end
+
+		tbl4.Belt = function()
+			local v15 = tbl4.Plot()
+			if not v15 then
+				return nil
+			end
+			local treadmillBottom = v15:FindFirstChild("TreadmillBottom")
+			if treadmillBottom and treadmillBottom:IsA("BasePart") then
+				return treadmillBottom
+			end
+			local clientTreadmillRenders = workspace:FindFirstChild("__ClientTreadmillRenders")
+			clientTreadmillRenders = clientTreadmillRenders and clientTreadmillRenders:FindFirstChild("TreadmillRender_" .. v15.Name)
+			local boundingBoxPart
+
+			if clientTreadmillRenders then
+				boundingBoxPart = clientTreadmillRenders:FindFirstChild("BoundingBoxPart") or clientTreadmillRenders:IsA("Model") and clientTreadmillRenders.PrimaryPart or clientTreadmillRenders:FindFirstChildWhichIsA("BasePart")
+			else
+				boundingBoxPart = clientTreadmillRenders
+			end
+
+			if boundingBoxPart then
+				return boundingBoxPart
+			end
+			local treadmillUpgrade = v15:FindFirstChild("TreadmillUpgrade")
+			return treadmillUpgrade and treadmillUpgrade:FindFirstChildWhichIsA("BasePart") or nil
+		end
+
+		tbl4.DistanceTo = function(arg)
+			local v15 = tbl4.Root()
+			if not v15 or not arg then
+				return math.huge
+			end
+			return (v15.Position - arg).Magnitude
+		end
+
+		do
+			local tbl10 = {}
+			local n3 = 0
+
+			local function fn11()
+				local v15 = tbl4.Plot()
+				if not v15 then
+					return {}
+				end
+				local tbl11 = {}
+
+				for _, v16 in ipairs({ "TreadmillBottom", "TreadmillUpgrade" }) do
+					local v17 = v15:FindFirstChild(v16)
+
+					if v17 then
+						if v17:IsA("BasePart") then
+							table.insert(tbl11, v17)
+						else
+							for _, descendant in ipairs(v17:GetDescendants()) do
+								if descendant:IsA("BasePart") then
+									table.insert(tbl11, descendant)
+								end
+							end
+						end
+					end
+				end
+
+				local clientTreadmillRenders = workspace:FindFirstChild("__ClientTreadmillRenders")
+				clientTreadmillRenders = clientTreadmillRenders and clientTreadmillRenders:FindFirstChild("TreadmillRender_" .. v15.Name)
+
+				if clientTreadmillRenders then
+					for _, descendant in ipairs(clientTreadmillRenders:GetDescendants()) do
+						if descendant:IsA("BasePart") then
+							table.insert(tbl11, descendant)
+						end
+					end
+				end
+
+				return tbl11
+			end
+
+			local function fn12()
+				for _, v15 in ipairs(fn11()) do
+					if not tbl10[v15] then
+						tbl10[v15] = {
+							CFrame = v15.CFrame,
+							CanTouch = v15.CanTouch,
+							CanCollide = v15.CanCollide,
+							Transparency = v15.Transparency,
+						}
+
+						pcall(function()
+							v15.CanTouch = false
+							v15.CanCollide = false
+							v15.Transparency = 1
+							v15.CFrame = v15.CFrame - Vector3.new(0, 120, 0)
+						end)
+					end
+				end
+			end
+
+			local function fn13()
+				for k, v15 in pairs(tbl10) do
+					if k and k.Parent then
+						pcall(function()
+							k.CFrame = v15.CFrame
+							k.CanTouch = v15.CanTouch
+							k.CanCollide = v15.CanCollide
+							k.Transparency = v15.Transparency
+						end)
+					end
+				end
+
+				table.clear(tbl10)
+			end
+
+			tbl4.HoldBelt = function()
+				n3 += 1
+				fn12()
+			end
+
+			tbl4.ReleaseBelt = function()
+				n3 = math.max(0, n3 - 1)
+
+				if n3 == 0 then
+					fn13()
+				end
+			end
+
+			tbl4.BeltHeld = function()
+				return n3 > 0
+			end
+
+			tbl4.RefreshBeltHide = function()
+				if n3 > 0 then
+					fn12()
+				end
+			end
+
+			fn4(function()
+				n3 = 0
+				fn13()
+			end)
+
+			tbl4.LeaveBelt = function()
+				local rfTreadmillAskDoff = networking:FindFirstChild("RF/Treadmill/AskDoff")
+
+				if rfTreadmillAskDoff and rfTreadmillAskDoff:IsA("RemoteFunction") then
+					pcall(rfTreadmillAskDoff.InvokeServer, rfTreadmillAskDoff)
+				end
+			end
+
+			tbl4.Treadmill = { Riding = false }
+
+			tbl4.ResetBelt = function()
+				n3 = 0
+				fn13()
+			end
+
+			tbl4.OnBelt = function()
+				local v15 = tbl4.Belt()
+				if not v15 or tbl10[v15] then
+					return false
+				end
+				local v16 = tbl4.Root()
+				if not v16 then
+					return false
+				end
+				local v17 = v15.CFrame:PointToObjectSpace(v16.Position)
+				local n4 = v15.Size.X / 2 + 2
+				local flag = math.abs(v17.X) <= n4
+
+				if flag then
+					local n5 = v15.Size.Z / 2 + 2
+					flag = math.abs(v17.Z) <= n5
+				end
+
+				return flag and v17.Y >= -2 and v17.Y <= v15.Size.Y / 2 + 8
+			end
+		end
+
+		tbl4.ExitBelt = function()
+			tbl4.Treadmill.Riding = false
+			tbl4.LeaveBelt()
+			local character = localPlayer.Character
+			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+
+			if humanoid then
+				pcall(function()
+					humanoid.Jump = true
+					humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+				end)
+			end
+
+			task.wait(0.35)
+		end
+
+		tbl4.Flying = false
+		tbl4.Driving = 0
+
+		tbl4.BeginFlight = function()
+			tbl4.Flying = true
+			local character = localPlayer.Character
+			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+
+			if humanoid then
+				humanoid.PlatformStand = true
+
+				pcall(function()
+					humanoid:ChangeState(Enum.HumanoidStateType.Freefall)
+				end)
+			end
+
+			return tbl4.Root() ~= nil
+		end
+
+		tbl4.SetFlightVelocity = function(assemblyLinearVelocity)
+			local v15 = tbl4.Root()
+
+			if v15 then
+				v15.AssemblyLinearVelocity = assemblyLinearVelocity
+				v15.AssemblyAngularVelocity = Vector3.zero
+			end
+		end
+
+		tbl4.EndFlight = function()
+			tbl4.Flying = false
+			local v15 = tbl4.Root()
+
+			if v15 then
+				pcall(function()
+					v15.AssemblyLinearVelocity = Vector3.zero
+					v15.AssemblyAngularVelocity = Vector3.zero
+				end)
+			end
+
+			local character = localPlayer.Character
+			character = character and character:FindFirstChildOfClass("Humanoid")
+
+			if character then
+				character.PlatformStand = false
+			end
+		end
+
+		do
+			local tbl10 = {
+				Enum.HumanoidStateType.FallingDown,
+				Enum.HumanoidStateType.Ragdoll,
+				Enum.HumanoidStateType.Physics,
+				Enum.HumanoidStateType.Seated,
+				Enum.HumanoidStateType.PlatformStanding,
+			}
+
+			local tbl11 = {}
+			local flag = false
+
+			tbl4.GodMode = function(arg)
+				local character = localPlayer.Character
+				local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+				if not character or not humanoid then
+					return
+				end
+
+				if arg then
+					flag = true
+
+					for _, v15 in ipairs(tbl10) do
+						pcall(function()
+							humanoid:SetStateEnabled(v15, false)
+						end)
+					end
+
+					pcall(function()
+						humanoid.BreakJointsOnDeath = false
+					end)
+
+					for _, descendant in ipairs(character:GetDescendants()) do
+						if descendant:IsA("BasePart") and tbl11[descendant] == nil then
+							tbl11[descendant] = descendant.CanCollide
+
+							pcall(function()
+								descendant.CanCollide = false
+							end)
+						end
+					end
+				elseif flag then
+					flag = false
+
+					for _, v15 in ipairs(tbl10) do
+						pcall(function()
+							humanoid:SetStateEnabled(v15, true)
+						end)
+					end
+
+					for k, v15 in pairs(tbl11) do
+						if k and k.Parent then
+							pcall(function()
+								k.CanCollide = v15
+							end)
+						end
+					end
+
+					table.clear(tbl11)
+				end
+			end
+		end
+
+		tbl4.GodTick = function()
+			local character = localPlayer.Character
+			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+
+			if humanoid and humanoid.Health < humanoid.MaxHealth then
+				pcall(function()
+					humanoid.Health = humanoid.MaxHealth
+				end)
+			end
+		end
+
+		tbl4.StopWalking = function()
+			local character = localPlayer.Character
+			local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
+			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+
+			if humanoid and humanoidRootPart then
+				pcall(function()
+					humanoid:MoveTo(humanoidRootPart.Position)
+					humanoid:Move(Vector3.zero, false)
+				end)
+			end
+		end
+
+		local function fn11(arg, arg2, arg3, arg4)
+			local n3 = tonumber(arg2) or 6
+			local n4 = tonumber(arg3) or 10
+			local n5 = 0
+			local flag = nil
+			local n6 = 0
+			local n7 = 0
+
+			while n5 < n4 do
+				if type(arg4) == "function" and arg4() then
+					tbl4.StopWalking()
+					return false
+				end
+				local character = localPlayer.Character
+				local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
+				character = character and character:FindFirstChildOfClass("Humanoid")
+				if not humanoidRootPart or not character or character.Health <= 0 then
+					return false
+				end
+
+				if (humanoidRootPart.Position - arg).Magnitude <= n3 then
+					tbl4.StopWalking()
+					return true
+				end
+				flag = flag and (humanoidRootPart.Position - flag).Magnitude < 1
+
+				if flag then
+					n6 += 0.2
+				else
+					n6 = 0
+				end
+
+				flag = humanoidRootPart.Position
+				n7 = math.max(0, n7 - 0.2)
+
+				if n6 >= 0.8 and n7 <= 0 then
+					tbl4.LeaveBelt()
+
+					pcall(function()
+						character.Jump = true
+					end)
+
+					n6 = 0
+					n7 = 1.5
+				end
+
+				character:MoveTo(arg)
+				n5 += task.wait(0.2)
+			end
+
+			tbl4.StopWalking()
+			return tbl4.DistanceTo(arg) <= n3
+		end
+
+		tbl4.WalkTo = function(arg, arg2, arg3, arg4)
+			tbl4.Driving = tbl4.Driving + 1
+			local ok, result = pcall(fn11, arg, arg2, arg3, arg4)
+			tbl4.Driving = math.max(0, tbl4.Driving - 1)
+			return ok and result == true
+		end
+
+		local tbl10 = {
+			Boss = "Fractured",
+			GreatBloom = "Spirit Bloom",
+			Sakura = "Bloom",
+			Monstrous = "Parasite",
+		}
+
+		task.spawn(function()
+			local mutations = tbl.Mutations
+
+			local ok, result = pcall(function()
+				return mutations.All()
+			end)
+
+			if ok and type(result) == "table" then
+				for k, v15 in pairs(result) do
+					local flag = type(v15) == "table"
+					local id
+
+					if flag then
+						id = v15.Id or k
+					else
+						id = flag
+					end
+
+					id = id or nil
+					local label = type(v15) == "table" and v15.Label or nil
+
+					if id ~= nil and type(label) == "string" and label ~= "" then
+						tbl10[tostring(id)] = label
+					end
+				end
+			end
+		end)
+
+		fn7 = function(arg)
+			return tbl10[tostring(arg)] or tostring(arg)
+		end
+
+		local tbl11, tbl12, n3, tbl13, tbl14, tbl15, tbl16, flag, tbl17, n4
+		local v15, n5, fn12
+
+		do
+			local tbl18 = {
+				"Forest",
+				"Desert",
+				"Snow",
+				"Lake",
+				"Jungle",
+				"Volcano",
+				"Prehistoric",
+				"Cosmic",
+				"Abyss Ocean",
+				"Cherry Blossom",
+				"Light Dark",
+				"Titan Temple",
+			}
+
+			local tbl19 = {}
+
+			for _, v16 in ipairs(tbl18) do
+				tbl19[v16] = true
+			end
+
+			task.spawn(function()
+				local eggState = tbl.EggState
+
+				local ok, result = pcall(function()
+					return eggState.ReadFieldEggs()
+				end)
+
+				if ok and type(result) == "table" and type(result.Records) == "table" then
+					for _, record in pairs(result.Records) do
+						local areaId = type(record) == "table" and record.AreaId or nil
+
+						if type(areaId) == "string" and not tbl19[areaId] then
+							tbl19[areaId] = true
+							table.insert(tbl18, areaId)
+						end
+					end
+				end
+			end)
+
+			tbl7 = { "Any" }
+			tbl8 = { Any = 0 }
+			local tbl20 = {}
+			local directory = tbl.Assets and tbl.Assets.Directory
+
+			if type(directory) == "table" then
+				for _, v16 in pairs(directory) do
+					local rarity = type(v16) == "table" and v16.Rarity or nil
+					local flag2 = type(rarity) == "table"
+
+					if flag2 then
+						flag2 = tonumber(rarity.RarityNumber or rarity.Rank)
+					end
+
+					flag2 = flag2 or nil
+
+					if flag2 then
+						local str = tbl20[flag2]
+
+						if not str then
+							str = tostring(rarity.DisplayName or rarity._id or flag2)
+						end
+
+						tbl20[flag2] = str
+					end
+				end
+			end
+
+			if next(tbl20) == nil then
+				tbl20 = {
+					"Common",
+					"Uncommon",
+					"Rare",
+					"Epic",
+					"Legendary",
+					"Mythic",
+					"Cosmic",
+					"Secret",
+					"Eternal",
+					"Divine",
+				}
+			end
+
+			local tbl21 = {}
+
+			for k in pairs(tbl20) do
+				table.insert(tbl21, k)
+			end
+
+			table.sort(tbl21)
+
+			for _, v16 in ipairs(tbl21) do
+				table.insert(tbl7, tbl20[v16])
+				tbl8[tbl20[v16]] = v16
+			end
+
+			tbl11 = { "Best Rarity", "Biggest Weight", "Best Mutation", "Highest Value", "Lowest Value" }
+			tbl12 = {}
+			n3 = 0
+			tbl13 = {}
+			tbl14 = {}
+			tbl15 = {}
+			tbl16 = {}
+			tbl4.Steal.RiftPriority = false
+			tbl4.Steal.RiftNeeds = {}
+			flag = false
+			tbl17 = {}
+			n4 = 0
+			v15 = tbl11[4]
+			n = 400
+			n5 = 27.4
+			n2 = 400
+			fn12 = nil
+
+			v4 = v8:CreateToggle({
+				Name = "Auto Steal",
+				Default = false,
+				Callback = function()
+					if fn12 then
+						fn12()
+					end
+				end,
+			})
+
+			for _, v16 in ipairs(tbl18) do
+				tbl12[v16] = true
+			end
+
+			fn6(v8:CreateMultiDropdown({
+				Name = "Target Areas",
+				Options = tbl18,
+				Default = tbl18,
+				Callback = function(arg)
+					local tbl22 = {}
+
+					if type(arg) == "table" then
+						for k, v16 in pairs(arg) do
+							if v16 == true and type(k) == "string" then
+								tbl22[k] = true
+							elseif type(v16) == "string" then
+								tbl22[v16] = true
+							end
+						end
+					end
+
+					if next(tbl22) == nil then
+						for _, v16 in ipairs(tbl18) do
+							tbl22[v16] = true
+						end
+					end
+
+					tbl12 = tbl22
+				end,
+			}))
+		end
+
+		v8:CreateDropdown({
+			Name = "Min Rarity",
+			Note = "Steal eggs of the chosen rarity and every rarity above it",
+			Options = tbl7,
+			Default = tbl7[1],
+			Callback = function(arg)
+				n3 = tbl8[arg] or 0
+			end,
+		})
+
+		fn5(v8, {
+			Name = "Min Steal Value",
+			Note = "Skip eggs worth less than this. Drag or type 250k, 50m, 1.5b",
+			Legacy = "Min Value To Steal",
+			SectionName = "Auto Steal",
+			OnRaw = function(arg)
+				n4 = arg
+			end,
+		})
+
+		do
+			local tbl18 = {}
+			local tbl19 = {}
+			local directory = tbl.Assets and tbl.Assets.Directory
+			local tbl20 = {}
+
+			if type(directory) == "table" then
+				for k, v16 in pairs(directory) do
+					local rarity = type(v16) == "table" and v16.Rarity or nil
+					local flag2 = type(rarity) == "table"
+
+					if flag2 then
+						flag2 = tonumber(rarity.RarityNumber or rarity.Rank)
+					end
+
+					local v17 = flag2 or nil
+
+					if v17 then
+						table.insert(tbl20, {
+							Category = tostring(k),
+							Name = tostring(v16.DisplayName or k),
+							Rarity = v17,
+							RarityName = tostring(rarity.DisplayName or rarity._id or v17),
+						})
+					end
+				end
+			end
+
+			table.sort(tbl20, function(arg, arg2)
+				if arg.Rarity ~= arg2.Rarity then
+					return arg.Rarity > arg2.Rarity
+				end
+				return arg.Name < arg2.Name
+			end)
+
+			for _, v16 in ipairs(tbl20) do
+				local str = string.format("%s [%s]", v16.Name, v16.RarityName)
+
+				if tbl19[str] then
+					str = string.format("%s [%s] (%s)", v16.Name, v16.RarityName, v16.Category)
+				end
+
+				table.insert(tbl18, str)
+				tbl19[str] = v16.Category
+			end
+
+			fn6(v8:CreateMultiDropdown({
+				Name = "Target Specific Eggs",
+				Note = "Only steal these eggs (empty = all)",
+				Options = tbl18,
+				Default = {},
+				Callback = function(arg)
+					local tbl21 = {}
+
+					if type(arg) == "table" then
+						for k, v16 in pairs(arg) do
+							k = v16 == true and type(k) == "string" and k or type(v16) == "string" and v16
+							local v17 = k or nil
+
+							if v17 and tbl19[v17] then
+								tbl21[tbl19[v17]] = true
+							end
+						end
+					end
+
+					tbl13 = tbl21
+				end,
+			}))
+		end
+
+		do
+			local n6 = 30
+			local v16 = nil
+			local flag2 = false
+			local n7 = 0
+
+			local function fn13()
+				local tbl18 = {}
+				local save2 = tbl.Save
+
+				if type(save2) == "table" and type(save2.Get) == "function" then
+					local ok, result = pcall(save2.Get)
+
+					if ok and type(result) == "table" then
+						local v17 = pairs
+						local inventory = result.Inventory or {}
+
+						for _, v18 in v17(inventory) do
+							if type(v18) == "table" and v18.Category ~= nil then
+								tbl18[tostring(v18.Category)] = true
+							end
+						end
+
+						local v18 = pairs
+						local eggInventory = result.EggInventory or {}
+
+						for _, v19 in v18(eggInventory) do
+							if type(v19) == "table" and v19.AssetCategory ~= nil then
+								tbl18[tostring(v19.AssetCategory)] = true
+							end
+						end
+					end
+				end
+
+				return tbl18
+			end
+
+			local function fn14()
+				local rfRiftAskState = networking:FindFirstChild("RF/Rift/AskState")
+				if not rfRiftAskState or not rfRiftAskState:IsA("RemoteFunction") then
+					return
+				end
+				local ok, result = pcall(rfRiftAskState.InvokeServer, rfRiftAskState)
+				if not ok or type(result) ~= "table" or type(result.Requirements) ~= "table" then
+					return
+				end
+				local v17 = fn13()
+				local riftNeeds = {}
+
+				for _, requirement in pairs(result.Requirements) do
+					if not v17[tostring(requirement)] then
+						riftNeeds[tostring(requirement)] = true
+					end
+				end
+
+				tbl4.Steal.RiftNeeds = riftNeeds
+			end
+
+			tbl3.Add(function()
+				if not tbl4.Steal.RiftPriority or flag2 or os.clock() < n7 then
+					return false
+				end
+				flag2 = true
+				n7 = os.clock() + n6
+
+				task.spawn(function()
+					pcall(fn14)
+					flag2 = false
+				end)
+
+				return false
+			end)
+
+			local function fn15()
+				local riftNeeds = tbl4.Steal.RiftNeeds
+				if not tbl4.Steal.RiftPriority or next(riftNeeds) == nil then
+					return
+				end
+				local v17 = fn13()
+				local flag3 = false
+
+				for k in pairs(riftNeeds) do
+					if v17[k] then
+						riftNeeds[k] = nil
+						flag3 = true
+					end
+				end
+
+				if flag3 then
+					tbl3.Wake()
+				end
+			end
+
+			local save2 = tbl.Save
+
+			if type(save2) == "table" and type(save2.FieldSignal) == "function" then
+				for _, v17 in ipairs({ "EggInventory", "Inventory" }) do
+					local ok, result = pcall(save2.FieldSignal, v17)
+
+					if ok and type(result) == "table" and type(result.Connect) == "function" then
+						local ok2, result2 = pcall(result.Connect, result, function()
+							task.defer(fn15)
+						end)
+
+						if ok2 and result2 then
+							fn4(function()
+								pcall(function()
+									result2:Disconnect()
+								end)
+							end)
+						end
+					end
+				end
+			end
+
+			v16 = v8:CreateToggle({
+				Name = "Steal Missing Rift Eggs",
+				Note = "Steal eggs the Rift recipe needs, after your filtered targets",
+				Default = false,
+				Callback = function()
+					tbl4.Steal.RiftPriority = tbl4.Toggle(v16, false) == true
+					n7 = 0
+
+					if not tbl4.Steal.RiftPriority then
+						tbl4.Steal.RiftNeeds = {}
+					end
+
+					tbl3.Wake()
+				end,
+			})
+		end
+
+		do
+			local n6 = 5
+			local n7 = 5
+			local n8 = 60
+			local v16 = nil
+			local n9 = 0
+			local n10 = 0
+			local flag2 = false
+			local tbl18 = {}
+
+			local function fn13()
+				local save2 = tbl.Save
+
+				if type(save2) == "table" and type(save2.Get) == "function" then
+					local ok, result = pcall(save2.Get)
+					if ok and type(result) == "table" then
+						return result
+					end
+				end
+
+				return nil
+			end
+
+			local function fn14()
+				local v17 = fn13()
+				local directory = tbl.Areas and tbl.Areas.Directory
+				local directory2 = tbl.Assets and tbl.Assets.Directory
+				if not v17 or type(directory) ~= "table" or type(directory2) ~= "table" then
+					return
+				end
+				local index = type(v17.Index) == "table" and v17.Index or {}
+				local tbl19 = {}
+				local v18 = pairs
+				local inventory = v17.Inventory or {}
+
+				for _, v19 in v18(inventory) do
+					if type(v19) == "table" and v19.Category ~= nil then
+						tbl19[tostring(v19.Category)] = true
+					end
+				end
+
+				local v19 = pairs
+				local eggInventory = v17.EggInventory or {}
+
+				for _, v20 in v19(eggInventory) do
+					if type(v20) == "table" and v20.AssetCategory ~= nil then
+						tbl19[tostring(v20.AssetCategory)] = true
+					end
+				end
+
+				local tbl20 = {}
+
+				for _, v20 in pairs(directory) do
+					local flag3 = type(v20) == "table" and type(v20.Rarity) == "table"
+
+					if flag3 then
+						flag3 = tonumber(v20.Rarity.RarityNumber or v20.Rarity.Rank)
+					end
+
+					flag3 = flag3 or 0
+					local v21 = pairs
+					local dropTable = type(v20) == "table" and v20.DropTable or {}
+
+					for _, v22 in v21(dropTable) do
+						local flag4 = type(v22) == "table" and v22[1] or nil
+						local n11 = type(v22) == "table" and tonumber(v22[2]) or 0
+						local flag5 = flag4 ~= nil and directory2[flag4] or nil
+
+						if type(flag5) == "table" and n11 > 0 and flag5.DontRoll ~= true then
+							local str = tostring(flag4)
+
+							if index[flag4] ~= true and not tbl19[str] and (tbl20[str] == nil or flag3 > tbl20[str]) then
+								tbl20[str] = flag3
+							end
+						end
+					end
+				end
+
+				tbl17 = tbl20
+			end
+
+			local function fn15(arg, ...)
+				local v17 = networking:FindFirstChild(arg)
+				if not v17 or not v17:IsA("RemoteFunction") then
+					return false
+				end
+				local ok, result = pcall(v17.InvokeServer, v17, ...)
+				return ok and result ~= false
+			end
+
+			local function fn16(arg, arg2)
+				local tbl19 = {}
+				if type(arg) ~= "table" then
+					return tbl19
+				end
+
+				for _, v17 in ipairs(arg2) do
+					local flag3 = arg
+
+					for _, v18 in ipairs(v17) do
+						flag3 = type(flag3) == "table" and flag3[v18] or nil
+					end
+
+					local v18 = ipairs
+					flag3 = type(flag3) == "table" and flag3 or {}
+
+					for _, v19 in v18(flag3) do
+						if type(v19) == "table" and v19.AssetId ~= nil then
+							table.insert(tbl19, v19.AssetId)
+						end
+					end
+				end
+
+				return tbl19
+			end
+
+			local tbl19 = {
+				{
+					Id = "LimitedEgg",
+					Gear = "GravityDisruptor",
+					Module = "LimitedEgg",
+					Lists = { { "Entries" }, { "MechaReroll", "Entries" } },
+				},
+				{
+					Id = "BrainrotEgg",
+					Gear = "BeeLauncher",
+					Module = "BrainrotEgg",
+					Lists = { { "Entries" } },
+				},
+				{
+					Id = "MonsterEgg",
+					Gear = "BeeLauncher",
+					Module = "MonsterEgg",
+					Lists = { { "Entries" }, { "MechaEntries" } },
+				},
+			}
+
+			local function fn17()
+				local v17 = fn13()
+				if not v17 then
+					return
+				end
+				local index = type(v17.Index) == "table" and v17.Index or {}
+				local indexClaimedCategories = type(v17.IndexClaimedCategories) == "table" and v17.IndexClaimedCategories or {}
+
+				for k, v18 in pairs(index) do
+					if v18 == true and indexClaimedCategories[k] ~= true then
+						fn15("RF/Codex/AskRedeemAll")
+						break
+					end
+				end
+
+				local gearInventory = type(v17.GearInventory) == "table" and v17.GearInventory or {}
+
+				for _, v18 in ipairs(tbl19) do
+					local flag3 = (tonumber(gearInventory[v18.Gear]) or 0) <= 0
+					local flag4
+
+					if flag3 then
+						flag4 = os.clock() >= (tbl18[v18.Id] or 0)
+					else
+						flag4 = flag3
+					end
+
+					if flag4 then
+						local v19 = fn16(tbl[v18.Module], v18.Lists)
+						local flag5 = #v19 > 0
+
+						for _, v20 in ipairs(v19) do
+							if index[v20] ~= true then
+								flag5 = false
+								break
+							end
+						end
+
+						if flag5 then
+							tbl18[v18.Id] = os.clock() + n8
+							fn15("RF/Codex/AskRedeemLimitedEgg", v18.Id)
+						end
+					end
+				end
+			end
+
+			tbl3.Add(function()
+				local now = os.clock()
+
+				if flag and now >= n9 then
+					n9 = now + n6
+					pcall(fn14)
+				end
+
+				if not flag2 and now >= n10 and tbl4.Toggle(tbl4.IndexClaimHandle, false) then
+					flag2 = true
+					n10 = now + n7
+
+					task.spawn(function()
+						pcall(fn17)
+						flag2 = false
+					end)
+				end
+
+				return false
+			end)
+
+			v16 = v8:CreateToggle({
+				Name = "Steal Missing Index Eggs",
+				Note = "Also steal eggs missing from your index, highest area first",
+				Default = false,
+				Callback = function()
+					flag = tbl4.Toggle(v16, false) == true
+					n9 = 0
+
+					if not flag then
+						tbl17 = {}
+					end
+
+					tbl3.Wake()
+				end,
+			})
+
+			tbl4.IndexClaimRestart = function()
+				n10 = 0
+				tbl3.Wake()
+			end
+		end
+
+		v8:CreateDropdown({
+			Name = "Steal Priority",
+			Options = tbl11,
+			Default = tbl11[4],
+			Callback = function(arg)
+				if table.find(tbl11, arg) then
+					v15 = arg
+				end
+			end,
+		})
+
+		v5 = v8:CreateSlider({
+			Name = "Tween Speed",
+			Min = 100,
+			Max = 1000,
+			Default = 400,
+			Increment = 10,
+			Unit = "studs/s",
+			Callback = function(arg)
+				local n6 = math.clamp(tonumber(arg) or 400, 100, 1000)
+				n = n6
+				n2 = n6
+			end,
+		})
+
+		tbl4.AntiGuard.PanelHandle = v8:CreateToggle({
+			Name = "Anti Guard V1",
+			Note = "Not recommended to use with Auto Steal",
+			Default = false,
+			Callback = function(panelShown)
+				if type(panelShown) ~= "boolean" then
+					panelShown = tbl4.Toggle(tbl4.AntiGuard.PanelHandle, false)
+				end
+
+				tbl4.AntiGuard.PanelShown = panelShown
+
+				if tbl4.AntiGuard.ShowPanel then
+					pcall(tbl4.AntiGuard.ShowPanel, panelShown)
+				end
+			end,
+		})
+
+		local v16
+		v16 = nil
+		local v17
+		v17 = nil
+		local v18
+		v18 = nil
+		local str
+		str = "None"
+		local str2
+		str2 = "Idle"
+		local flag2
+		flag2 = false
+		local n6
+		n6 = 0
+		local tbl18
+		tbl18 = {}
+		local n7
+		n7 = 20
+		local uid
+		uid = nil
+		local fn13
+
+		fn13 = function(arg)
+			return arg ~= n6 or not tbl4.Toggle(v16, false)
+		end
+
+		local fn14
+
+		do
+			local tbl19 = {}
+
+			local function fn15(arg)
+				if type(arg) ~= "number" or tbl19[arg] then
+					return
+				end
+				tbl19[arg] = true
+
+				task.delay(math.max(0, arg - workspace:GetServerTimeNow()) + 0.05, function()
+					tbl19[arg] = nil
+					tbl3.Wake()
+				end)
+			end
+
+			local n8 = 0
+
+			fn14 = function()
+				local areaEggCycle = tbl.AreaEggCycle
+				if type(areaEggCycle) ~= "table" then
+					return nil
+				end
+
+				local ok, result, result2, result3, result4 = pcall(function()
+					local serverTimeNow = workspace:GetServerTimeNow()
+					local nextResetTime = areaEggCycle.NextResetTime
+					return serverTimeNow, areaEggCycle.IsNightPhase(serverTimeNow), areaEggCycle.NextNightTime(serverTimeNow), nextResetTime(serverTimeNow)
+				end)
+
+				if not ok or type(result4) ~= "number" then
+					return nil
+				end
+
+				if result2 == true then
+					n8 = result4 + tbl4.WallOpenDelay()
+					fn15(n8)
+					return n8, "night", result
+				end
+
+				if tbl4.WallSealed() then
+					fn15(result + 0.3)
+					return math.max(n8, result), "wall", result
+				end
+
+				if type(result3) == "number" and result3 > result then
+					fn15(result3)
+				end
+
+				return nil
+			end
+		end
+
+		do
+			local areaEggResetWall = tbl.AreaEggResetWall
+			local changed = type(areaEggResetWall) == "table" and areaEggResetWall.Changed or nil
+
+			if changed and type(changed.Connect) == "function" then
+				local ok, result = pcall(function()
+					return changed:Connect(function()
+						tbl3.Wake()
+					end)
+				end)
+
+				if ok and result then
+					fn4(function()
+						pcall(function()
+							result:Disconnect()
+						end)
+					end)
+				end
+			end
+		end
+
+		local n8
+		n8 = 8
+		local v19
+		v19 = nil
+		local n9
+		n9 = 0
+		local fn15, fn16, fn17
+
+		local function fn18(arg)
+			local tbl19 = {}
+			local str3 = "FirstAreaEgg_" .. tostring(localPlayer.UserId)
+			local eggState = tbl.EggState
+
+			if type(eggState) == "table" and type(eggState.ReadFieldEggs) == "function" then
+				task.spawn(function()
+					local ok, result = pcall(eggState.ReadFieldEggs)
+
+					if ok and type(result) == "table" and type(result.Records) == "table" then
+						for _, record in pairs(result.Records) do
+							local flag3 = type(record) == "table" and type(record.Uid) == "string"
+
+							if flag3 then
+								flag3 = not (arg and string.sub(record.Uid, 1, #str3) == str3)
+							end
+
+							if flag3 then
+								tbl19[record.Uid] = true
+							end
+						end
+					end
+				end)
+			end
+
+			return tbl19
+		end
+
+		fn15 = function()
+			if v19 == nil then
+				return false
+			end
+
+			if tbl4.IsNight() then
+				return true
+			end
+
+			if n9 == math.huge then
+				n9 = os.clock() + n8
+			end
+
+			return false
+		end
+
+		fn16 = function()
+			if v19 and n9 == math.huge then
+				return
+			end
+			v19 = fn18(true)
+			n9 = math.huge
+			table.clear(tbl14)
+			table.clear(tbl16)
+			table.clear(tbl15)
+			table.clear(tbl18)
+			uid = nil
+		end
+
+		fn17 = function()
+			if not v19 then
+				return false
+			end
+
+			if os.clock() >= n9 then
+				v19 = nil
+				return false
+			end
+			local v20 = fn18()
+			if next(v20) == nil then
+				return true
+			end
+			local flag3 = false
+			local flag4 = false
+
+			for k in pairs(v20) do
+				if v19[k] then
+					flag3 = true
+				else
+					flag4 = true
+				end
+			end
+
+			if not flag3 then
+				v19 = nil
+				return false
+			end
+			return not flag4
+		end
+
+		local fn19
+
+		do
+			local function fn20(arg)
+				local directory = tbl.Assets and tbl.Assets.Directory
+				local flag3 = type(directory) == "table" and directory[tostring(arg)] or nil
+				local rarity = type(flag3) == "table" and type(flag3.Rarity) == "table" and flag3.Rarity or nil
+				local tbl19 = {}
+
+				if rarity then
+					rarity = tonumber(rarity.RarityNumber or rarity.Rank)
+				end
+
+				tbl19.RarityNumber = rarity or 0
+				tbl19.EarningRate = type(flag3) == "table" and tonumber(flag3.EarningRate) or 0
+				return tbl19
+			end
+
+			local function fn21(arg)
+				local mutations = tbl.Mutations
+
+				if type(mutations) == "table" and type(mutations.EarningsFor) == "function" then
+					local ok, result = pcall(mutations.EarningsFor, type(arg) == "table" and arg or {})
+					if ok and type(result) == "number" then
+						return result
+					end
+				end
+
+				return 1
+			end
+
+			local function fn22(arg, arg2)
+				local eggRecords = tbl.EggRecords
+
+				if type(eggRecords) == "table" and type(eggRecords.WeightKgForScale) == "function" then
+					local ok, result = pcall(eggRecords.WeightKgForScale, arg, arg2)
+					if ok and type(result) == "number" then
+						return result
+					end
+				end
+
+				return 0
+			end
+
+			fn19 = function(arg, arg2)
+				local records = nil
+				local eggState = tbl.EggState
+
+				if type(eggState) == "table" and type(eggState.ReadFieldEggs) == "function" then
+					task.spawn(function()
+						local ok, result = pcall(eggState.ReadFieldEggs)
+
+						if ok and type(result) == "table" and type(result.Records) == "table" and next(result.Records) ~= nil then
+							records = result.Records
+						end
+					end)
+				end
+
+				if not records then
+					local rfEggWorldAskFieldEggSnapshot = networking:FindFirstChild("RF/EggWorld/AskFieldEggSnapshot")
+					if not rfEggWorldAskFieldEggSnapshot or not rfEggWorldAskFieldEggSnapshot:IsA("RemoteFunction") then
+						return {}
+					end
+					local ok, result = pcall(rfEggWorldAskFieldEggSnapshot.InvokeServer, rfEggWorldAskFieldEggSnapshot)
+					records = ok and type(result) == "table" and result.Records or nil
+				end
+
+				if type(records) ~= "table" then
+					return {}
+				end
+				local tbl19 = {}
+				local tbl20 = {}
+
+				for _, record in pairs(records) do
+					local uid2 = type(record) == "table" and record.Uid or nil
+
+					if uid2 and record.State ~= "Claimed" then
+						tbl20[uid2] = true
+					end
+
+					local flag3 = record.State == "Carried" and arg2 == true and arg ~= true and not (tbl4.Steal.Carrying and uid2 == tbl4.Steal.CarryUid)
+					local flag4
+
+					if uid2 then
+						flag4 = record.State == "Slot" or record.State == "Dropped" or flag3
+					else
+						flag4 = uid2
+					end
+
+					local v20 = uid2 and tbl14[uid2] or nil
+					local flag5 = uid2 and tbl15[uid2] == true or false
+					local flag6 = arg ~= true and flag and uid2 and tbl17[tostring(record.AssetCategory)] or nil
+					local flag7 = arg ~= true and tbl4.Steal.RiftPriority == true and uid2 ~= nil and tbl4.Steal.RiftNeeds[tostring(record.AssetCategory)] == true
+					local flag8 = arg == true or v20 ~= nil or flag5 or flag7 or flag6 ~= nil or tbl12[tostring(record.AreaId)] == true
+					local flag9 = arg ~= true and v20 == nil and tbl16[uid2] == true
+					local flag10 = v19 ~= nil and v19[uid2] == true
+					flag4 = flag4 and typeof(record.BottomCFrame) == "CFrame"
+
+					if flag4 then
+						flag4 = (tbl18[uid2] or 0) <= os.clock()
+					end
+
+					if flag4 and flag8 and not flag9 and not flag10 then
+						local v21 = fn20(record.AssetCategory)
+						local str3 = tostring(record.AssetCategory)
+						local flag11 = v21.RarityNumber >= n3
+						local flag12 = next(tbl13) == nil or tbl13[str3] == true
+						local n10 = tonumber(record.AssetScale) or 1
+						local v22 = fn21(record.Mutations)
+						local n11 = n10 > 5 and (n10 / 5) ^ 1.2 * 19.637875755794113 or n10 ^ 1.85
+						local flag13 = n4 <= 0 or v21.EarningRate * n11 * v22 >= n4
+						flag13 = flag11 and flag12 and flag13
+						local flag14 = flag7 and not flag13 and not flag5 and v20 == nil and flag6 == nil
+
+						if arg == true or v20 or flag5 or flag7 or flag6 ~= nil or flag13 then
+							table.insert(tbl19, {
+								Uid = uid2,
+								Category = str3,
+								Scale = n10,
+								State = record.State,
+								Rarity = v21.RarityNumber,
+								Weight = fn22(record.AssetCategory, n10),
+								Mutation = v22,
+								Value = v21.EarningRate * n11 * v22,
+								CFrame = record.BottomCFrame,
+								AreaId = tostring(record.AreaId),
+								Rift = arg ~= true and flag7,
+								RiftOnly = arg ~= true and flag14,
+								Index = flag6,
+								Forced = arg ~= true and v20 and v20.At or nil,
+								Priority = arg ~= true and flag5,
+							})
+						end
+					end
+				end
+
+				if next(tbl20) ~= nil then
+					for k in pairs(tbl14) do
+						if not tbl20[k] then
+							tbl14[k] = nil
+						end
+					end
+
+					for k in pairs(tbl15) do
+						if not tbl20[k] then
+							tbl15[k] = nil
+						end
+					end
+
+					for k in pairs(tbl16) do
+						if not tbl20[k] then
+							tbl16[k] = nil
+						end
+					end
+				end
+
+				table.sort(tbl19, function(arg3, arg4)
+					if arg3.Forced ~= nil ~= arg4.Forced ~= nil then
+						return arg3.Forced ~= nil
+					end
+
+					if arg3.Forced and arg4.Forced and arg3.Forced ~= arg4.Forced then
+						return arg3.Forced < arg4.Forced
+					end
+
+					if arg3.Priority ~= arg4.Priority then
+						return arg3.Priority == true
+					end
+
+					if arg3.RiftOnly ~= arg4.RiftOnly then
+						return arg4.RiftOnly == true
+					end
+
+					if arg3.Index ~= nil ~= arg4.Index ~= nil then
+						return arg3.Index ~= nil
+					end
+
+					if arg3.Index and arg4.Index and arg3.Index ~= arg4.Index then
+						return arg3.Index > arg4.Index
+					end
+
+					if v15 == tbl11[2] and arg3.Weight ~= arg4.Weight then
+						return arg3.Weight > arg4.Weight
+					end
+
+					if v15 == tbl11[3] and arg3.Mutation ~= arg4.Mutation then
+						return arg3.Mutation > arg4.Mutation
+					end
+
+					if v15 == tbl11[4] and arg3.Value ~= arg4.Value then
+						return arg3.Value > arg4.Value
+					end
+
+					if v15 == tbl11[5] and arg3.Value ~= arg4.Value then
+						return arg3.Value < arg4.Value
+					end
+
+					if arg3.Rarity ~= arg4.Rarity then
+						return arg3.Rarity > arg4.Rarity
+					end
+
+					if arg3.Value ~= arg4.Value then
+						return arg3.Value > arg4.Value
+					end
+					return tostring(arg3.Uid) < tostring(arg4.Uid)
+				end)
+
+				return tbl19
+			end
+		end
+
+		local n10
+		n10 = 6
+		local fn20, fn21, fn22, fn23, fn24
+
+		do
+			local v20 = nil
+			local connection = nil
+
+			fn20 = function(arg, arg2, arg3, arg4, arg5)
+				local n11 = arg2 - arg.Position
+				local magnitude = n11.Magnitude
+				local n12 = math.max(arg4, 0.0041666666666666666)
+				local vector = Vector3.zero
+
+				if magnitude > 0.01 then
+					vector = n11.Unit * math.min(arg3, magnitude / n12)
+				end
+
+				local assemblyLinearVelocity = vector + Vector3.new(0, workspace.Gravity * n12 * 0.5, 0)
+
+				if magnitude > 2 then
+					if not arg5.mark then
+						arg5.mark = magnitude
+						arg5.clock = 0
+					end
+
+					arg5.clock = arg5.clock + arg4
+
+					if arg5.clock >= 0.4 then
+						if arg5.mark - magnitude < arg3 * 0.1 then
+							pcall(function()
+								arg.CFrame = arg.CFrame + n11.Unit * math.min(magnitude, arg3 * n12)
+							end)
+						end
+
+						arg5.mark = magnitude
+						arg5.clock = 0
+					end
+				else
+					arg5.mark = nil
+				end
+
+				pcall(function()
+					arg.AssemblyLinearVelocity = assemblyLinearVelocity
+					arg.AssemblyAngularVelocity = Vector3.zero
+				end)
+
+				return magnitude <= 0.5
+			end
+
+			fn21 = function()
+				local v21 = tbl4.Root()
+
+				if v21 then
+					pcall(function()
+						v21.AssemblyLinearVelocity = Vector3.zero
+						v21.AssemblyAngularVelocity = Vector3.zero
+					end)
+				end
+			end
+
+			local connection2 = nil
+			local tbl19 = {}
+
+			fn22 = function()
+				v20 = nil
+
+				if connection then
+					connection:Disconnect()
+					connection = nil
+				end
+
+				if connection2 then
+					connection2:Disconnect()
+					connection2 = nil
+				end
+			end
+
+			fn23 = function()
+				local num = tonumber(localPlayer:GetAttribute("RagdollEndTime"))
+				return num ~= nil and num > workspace:GetServerTimeNow()
+			end
+
+			local flag3 = false
+
+			local function fn25()
+				if flag3 then
+					return true
+				end
+				return true
+			end
+
+			fn24 = function(arg, arg2)
+				v20 = arg
+				flag3 = arg2 == true
+				if connection or not arg then
+					return
+				end
+				tbl19 = {}
+
+				connection = RunService.Heartbeat:Connect(function()
+					if not v20 or fn25() or fn23() or tbl4.AntiGuard.Busy then
+						return
+					end
+					local v21 = tbl4.Root()
+					if not v21 then
+						return
+					end
+
+					pcall(function()
+						local rotation = v21.CFrame.Rotation
+						v21.CFrame = CFrame.new(v20) * rotation
+						v21.AssemblyLinearVelocity = Vector3.zero
+						v21.AssemblyAngularVelocity = Vector3.zero
+					end)
+				end)
+
+				connection2 = RunService.PreSimulation:Connect(function(deltaTime)
+					if not v20 or not fn25() or fn23() or tbl4.AntiGuard.Busy then
+						return
+					end
+					local v21 = tbl4.Root()
+
+					if v21 then
+						fn20(v21, v20, n2, deltaTime, tbl19)
+					end
+				end)
+			end
+		end
+
+		fn4(fn22)
+		local fn25
+
+		fn25 = function()
+			fn22()
+			tbl4.EndFlight()
+			tbl4.GodMode(false)
+			local character = localPlayer.Character
+			character = character and character:FindFirstChildOfClass("Humanoid")
+
+			if character then
+				character.PlatformStand = false
+			end
+		end
+
+		local n11, fn26, fn27
+
+		do
+			local n12 = 1.5
+			n11 = 0.6
+
+			local function fn28(arg, arg2)
+				local x = arg2.X
+				return (Vector3.new(arg.X, 0, arg.Z) - Vector3.new(x, 0, arg2.Z)).Magnitude
+			end
+
+			local function fn29(arg)
+				local ok, result = pcall(function()
+					return arg:GetPivot().Position
+				end)
+
+				return ok and result or nil
+			end
+
+			fn26 = function(arg, arg2, arg3)
+				local v20 = fn28(arg.Position, arg3)
+				local areaEggSlotsClient = workspace:FindFirstChild("AreaEggSlotsClient")
+				if not areaEggSlotsClient then
+					return true
+				end
+
+				for _, child in ipairs(areaEggSlotsClient:GetChildren()) do
+					if child:IsA("Model") and child.Name ~= arg2 then
+						local v21 = fn29(child)
+						if v21 and fn28(v21, arg.Position) + n12 < v20 then
+							return false
+						end
+					end
+				end
+
+				return true
+			end
+
+			fn27 = function(arg, arg2, arg3)
+				local n13 = arg3 or 14
+				local v20 = nil
+				local v21
+
+				for _, child in ipairs(workspace:GetChildren()) do
+					if child.Name == "SmartPromptPart" and child:IsA("BasePart") then
+						local carryAreaEgg = child:FindFirstChild("CarryAreaEgg")
+
+						if carryAreaEgg and carryAreaEgg:IsA("ProximityPrompt") then
+							local v22 = fn28(child.Position, arg2)
+
+							if v22 < n13 then
+								n13 = v22
+								v20 = carryAreaEgg
+								v21 = child
+							end
+						end
+					end
+				end
+
+				if not v20 or not v21 then
+					return nil
+				end
+
+				if type(arg) == "string" and not fn26(v21, arg, arg2) then
+					return nil
+				end
+				return v20, v21
+			end
+		end
+
+		local fn28
+
+		fn28 = function(arg)
+			local eggState = tbl.EggState
+
+			if type(arg) == "string" and type(eggState) == "table" and type(eggState.CarryFieldEgg) == "function" then
+				pcall(eggState.CarryFieldEgg, arg)
+			end
+		end
+
+		local fn29
+
+		do
+			local function fn30()
+				local carryUid = tbl4.Steal.CarryUid
+				return type(carryUid) == "string" and carryUid or nil
+			end
+
+			local function fn31(arg)
+				local v20 = fn30()
+				if not v20 or type(arg) ~= "string" then
+					return true
+				end
+				return v20 == arg
+			end
+
+			local function fn32(arg)
+				if type(arg) ~= "string" then
+					return false
+				end
+				local v20 = fn19(false, true)
+				if #v20 == 0 then
+					return true
+				end
+
+				for _, v21 in ipairs(v20) do
+					if v21.Uid == arg then
+						return true
+					end
+				end
+
+				return false
+			end
+
+			local function fn33(arg)
+				local eggState = tbl.EggState
+
+				if type(eggState) == "table" and type(eggState.DropFieldEgg) == "function" then
+					pcall(eggState.DropFieldEgg, "PlayerRequest")
+				end
+
+				local n12 = 0
+
+				while tbl4.Steal.Carrying and n12 < 1 and not fn13(arg) do
+					n12 += RunService.Heartbeat:Wait()
+				end
+			end
+
+			fn29 = function(arg, arg2)
+				local n12 = 0
+
+				while not tbl4.Steal.Carrying and n12 < n11 and not fn13(arg2) do
+					n12 += RunService.Heartbeat:Wait()
+				end
+
+				if not tbl4.Steal.Carrying then
+					str2 = "The egg never reached the hand"
+					return false
+				end
+
+				if fn31(arg) then
+					return true
+				end
+				local v20 = fn30()
+				if fn32(v20) then
+					str2 = "Holding another egg that still matches, delivering it"
+					return true
+				end
+				str2 = "Wrong egg in hand, dropping it"
+				fn33(arg2)
+				return false
+			end
+		end
+
+		local fn30
+
+		fn30 = function(arg, arg2)
+			local eggState = tbl.EggState
+			local position = typeof(arg.CFrame) == "CFrame" and arg.CFrame.Position or nil
+			if not position then
+				return false
+			end
+			local n12 = 0
+			local huge = math.huge
+			local n13 = 0
+
+			while n12 < 1.5 do
+				if fn13(arg2) then
+					return false
+				end
+
+				if tbl4.Steal.Carrying then
+					return true
+				end
+
+				if huge >= 0.06 then
+					local v20 = fn27(arg.Uid, position)
+
+					if v20 then
+						pcall(function()
+							v20.HoldDuration = 0
+						end)
+
+						n13 = 0
+
+						if typeof(fireproximityprompt) == "function" then
+							pcall(fireproximityprompt, v20)
+						end
+					else
+						n13 += 1
+						if n13 >= 4 then
+							return false
+						end
+
+						if type(eggState) == "table" and type(eggState.CarryFieldEgg) == "function" then
+							pcall(eggState.CarryFieldEgg, arg.Uid)
+						end
+					end
+
+					huge = 0
+				end
+
+				local result = RunService.Heartbeat:Wait()
+				n12 += result
+				huge += result
+			end
+
+			return tbl4.Steal.Carrying == true
+		end
+
+		local fn31, fn32, n12, n13
+
+		do
+			local v20 = fn2(function()
+				return ReplicatedStorage.Shared.Modules.Ragdoll
+			end)
+
+			local function fn33()
+				local character = localPlayer.Character
+
+				if type(v20) == "table" and type(v20.IsRagdolled) == "function" then
+					local ok, result = pcall(v20.IsRagdolled, character)
+					if ok and result == true then
+						return true
+					end
+				end
+
+				local num = tonumber(localPlayer:GetAttribute("RagdollEndTime"))
+				if num and num > workspace:GetServerTimeNow() then
+					return true
+				end
+				character = character and character:FindFirstChildOfClass("Humanoid")
+				if character then
+					local state = character:GetState()
+					return state == Enum.HumanoidStateType.Physics or state == Enum.HumanoidStateType.Ragdoll or state == Enum.HumanoidStateType.FallingDown
+				end
+				return false
+			end
+
+			fn31 = function(arg, arg2)
+				if tbl4.Steal.Carrying then
+					return true
+				end
+				local rfEggWorldAskFieldEggSnapshot = networking:FindFirstChild("RF/EggWorld/AskFieldEggSnapshot")
+				if not rfEggWorldAskFieldEggSnapshot or not rfEggWorldAskFieldEggSnapshot:IsA("RemoteFunction") then
+					return false
+				end
+				local n14 = 0
+
+				while n14 < 1 do
+					if fn13(arg2) or tbl4.Steal.Carrying then
+						return tbl4.Steal.Carrying == true
+					end
+					local ok, result = pcall(rfEggWorldAskFieldEggSnapshot.InvokeServer, rfEggWorldAskFieldEggSnapshot)
+					local records = ok and type(result) == "table" and result.Records or nil
+
+					if type(records) == "table" then
+						local flag3 = false
+
+						for _, record in pairs(records) do
+							if type(record) == "table" and record.Uid == arg and (record.State == "Slot" or record.State == "Dropped") then
+								flag3 = true
+								break
+							end
+						end
+
+						if not flag3 then
+							return tbl4.Steal.Carrying == true
+						end
+					end
+
+					n14 += task.wait(0.3)
+				end
+
+				return tbl4.Steal.Carrying == true
+			end
+
+			local function fn34(arg)
+				local v21 = tbl4.Root()
+				local position = typeof(arg.CFrame) == "CFrame" and arg.CFrame.Position or nil
+				if not v21 or not position then
+					return math.huge
+				end
+				return (v21.Position - position).Magnitude
+			end
+
+			fn32 = function(arg)
+				local huge = math.huge
+				local v21 = nil
+
+				for _, v22 in ipairs(arg) do
+					local v23 = fn34(v22)
+
+					if v23 < huge then
+						huge = v23
+						v21 = v22
+					end
+				end
+
+				return v21, huge
+			end
+
+			n12 = 20
+			n13 = 90
+			local n14 = 6
+
+			local function fn35(arg, arg2, arg3, arg4, arg5, arg6)
+				fn22()
+				local v21 = tbl4.Root()
+				if not v21 then
+					return false
+				end
+				local character = localPlayer.Character
+				local position = v21.Position
+				local tbl19 = {}
+				local position2 = nil
+				local flag3 = nil
+				local str3 = nil
+				local n15 = 0
+
+				local function fn36()
+					if arg4 ~= nil then
+						return true
+					end
+					return true
+				end
+
+				local function fn37(arg7)
+					n15 += arg7
+					if fn13(arg2) then
+						flag3 = false
+						return nil
+					end
+
+					if arg3 and not tbl4.Steal.Carrying then
+						flag3 = false
+						str3 = "dropped"
+						return nil
+					end
+
+					if arg6 then
+						local v22 = arg6()
+
+						if v22 then
+							flag3 = false
+							str3 = v22
+							return nil
+						end
+					end
+
+					local v22 = tbl4.Root()
+
+					if not v22 or n15 >= 25 or localPlayer.Character ~= character then
+						flag3 = false
+						str3 = "respawned"
+						return nil
+					end
+
+					return v22
+				end
+
+				local connection = RunService.Heartbeat:Connect(function(deltaTime)
+					if flag3 ~= nil or fn36() or tbl4.AntiGuard.Busy then
+						return
+					end
+					local v22 = fn37(deltaTime)
+					if not v22 then
+						return
+					end
+
+					if n10 < (v22.Position - position).Magnitude then
+						if arg5 then
+							flag3 = false
+							str3 = "displaced"
+							return
+						end
+
+						position = v22.Position
